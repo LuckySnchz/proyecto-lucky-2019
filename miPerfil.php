@@ -14,7 +14,7 @@ if ( isset($_SESSION["usuarioLogueado"]) == false ) {
   $nombreDefaultEdicion= $usuario["nombre"];
   $apellidoDefaultEdicion= $usuario["apellido"];
 	$telefonoDefaultEdicion= $usuario["telefono"];
-$avatarDefaultEdicion=$usuario["avatar"];
+  $avatarDefaultEdicion=$usuario["avatar"];
 
 
 
@@ -28,11 +28,13 @@ $avatarDefaultEdicion=$usuario["avatar"];
 
 
 
+
 $avatar=guardarAvatarEdicion($_FILES["avatarEd"]["name"],$_FILES["avatarEd"]["tmp_name"]);
 
-			$usuario =actualizarUsuarioPorEmail($_SESSION["usuarioLogueado"],$_POST["nombre"],$_POST["apellido"],$_POST["telefono"],$avatar);
-			header("location:miPerfil.php");exit;}
+			$usuario =actualizarUsuarioPorEmail($_SESSION["usuarioLogueado"],$_POST["nombre"],$_POST["apellido"],$_POST["telefono"],$_POST["password"],$avatar);
 
+			echo '<div class="alert alert-success" style="text-align:center;font-size:30px;color:"red">EDICIÓN EXITOSA </div>';
+			header("Refresh: 1; URL=index.php");exit;}
 	}
 
 ?>
@@ -208,11 +210,52 @@ $avatar=guardarAvatarEdicion($_FILES["avatarEd"]["name"],$_FILES["avatarEd"]["tm
 																																										<?php endif; ?>
 																																									</ul>
 																																									</div>
+																																									<div class="form-group">
+																				 			 																		 <ul style="color:red; ">
+																				 			 																		<?php if (isset($errores["passwordold"])) : ?>
+																				 			 									<input style="border: 1px solid red;" type="password" class="form-control" placeholder="Contasenia Actual *" value="" name="passwordold" />
+																				 			 																			<p style="color:red;font-size:8px;">
+																				 			 																				<li><?=$errores["passwordold"]?></li>
+																				 			 																			</p>
+																				 			 																		<?php else : ?>
+																				 			 																			<input type="password" class="form-control" placeholder="Contasenia Actual *" value="" name="passwordold" />
+																				 			 																		<?php endif; ?>
+																				 			 																		</ul>
+																				 			 							            </div>
+																																									<div class="form-group">
+																																										<ul style="color:red; ">
+																																									 <?php if (isset($errores["password"])) : ?>
+																																 <input style="border: 1px solid red;" type="password" class="form-control" placeholder="Nueva Contasenia *" value="" name="password" />
+																																										 <p style="color:red;font-size:8px;">
+																																											 <li><?=$errores["password"]?></li>
+																																										 </p>
+																																									 <?php else : ?>
+																																										 <input type="password" class="form-control" placeholder="Nueva Contrasenia *" value="" name="password" />
+																																									 <?php endif; ?>
+																																									 </ul>
+																														 </div>
+
+																														 <div class="form-group">
+																																<ul style="color:red; ">
+																															 <?php if (isset($errores["cpassword"])) : ?>
+																						 <input style="border: 1px solid red;" type="password" class="form-control" placeholder="Confirmar Nueva Contasenia *" value="" name="cpassword" />
+																																 <p style="color:red;font-size:8px;">
+																																	 <li><?=$errores["cpassword"]?></li>
+																																 </p>
+																															 <?php else : ?>
+																																 <input type="password" class="form-control" placeholder="Confirmar Nueva Contasenia *" value="" name="cpassword" />
+																															 <?php endif; ?>
+																															 </ul>
+																				 </div>
 
 
 
-																																									<div class="form-group" id="edicionDeAvatar" >
-																																									 <ul style="color:red">
+
+
+
+																																									<div class="form-group" id="edicionDeAvatar">
+																																										<ul style="color:red">
+
 																																								<?php if (isset($errores["avatarEd"])) : ?>
 																																									<input type="file" class="form-control" placeholder="Tu Avatar *" value="" name="avatarEd" style="width:100%;margin-left:-0.5%" />
 																																																			<p style="color:red;font-size:8px;">
@@ -225,8 +268,10 @@ $avatar=guardarAvatarEdicion($_FILES["avatarEd"]["name"],$_FILES["avatarEd"]["tm
 																																																		<?php else : ?>
 																																																			<input type="file" class="form-control" placeholder="Tu Avatar *" value="" name="avatarEd" style="width:100%;margin-left:-0.5%"/>
 																																																		 <?php endif; ?>
+																																																		 </div>
 
-																																																	</div>
+
+
 
 
 

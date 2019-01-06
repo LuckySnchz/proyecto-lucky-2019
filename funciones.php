@@ -139,6 +139,24 @@ function validarEdicion() {
   } else if (is_numeric($_POST["telefono"]) == false) {
     $errores["telefono"] = "El telefono debe ser un numero";
   }
+if (!existeElPassEd($_POST["passwordold"])){
+  $errores["passwordold"] = "La Contasenia Actual no existe";
+
+}
+
+
+
+
+
+  if (estaVacio($_POST["password"])) {
+    $errores["password"] = "Dejaste la contrasenia vacia";
+  }
+  if (estaVacio($_POST["cpassword"])) {
+    $errores["cpassword"] = "Dejaste el campo confirmar contrasenia vacio";
+  }
+  if (!estaVacio($_POST["password"]) && !estaVacio($_POST["cpassword"]) && $_POST["password"] != $_POST["cpassword"]) {
+    $errores["password"] = "Las contrasenias no coinciden";
+  }
 
   if ($_FILES["avatarEd"]["error"] != 0) {
     $errores["avatarEd"] = "Hubo un error en la carga";
@@ -248,17 +266,18 @@ function existeElEmail($email) {
   }
 }
 
-function actualizarUsuarioPorEmail($email,$nombre,$apellido,$telefono,$avatar){
+function actualizarUsuarioPorEmail($email,$nombre,$apellido,$telefono,$password,$avatar){
 
-
+$password=password_hash($password, PASSWORD_DEFAULT);
 global $db;
-$sql="UPDATE users SET nombre=:nombre,apellido=:apellido,telefono=:telefono,avatar=:avatar  WHERE email = :email ";
+$sql="UPDATE users SET nombre=:nombre,apellido=:apellido,telefono=:telefono, password=:password,avatar=:avatar  WHERE email = :email ";
 $consulta = $db->prepare($sql);
 
 $consulta->bindValue(":email", $email);
 $consulta->bindValue(":nombre", $nombre);
 $consulta->bindValue(":apellido", $apellido);
 $consulta->bindValue(":telefono", $telefono);
+$consulta->bindValue(":password", $password);
 $consulta->bindValue(":avatar", $avatar);
 $consulta->execute();
 }
@@ -277,6 +296,18 @@ function buscarUsuarioPorEmail($email) {
   return $consulta->fetch(PDO::FETCH_ASSOC);
 }
 
+function existeElPassEd($password) {
+  $usuarios = traerUsuarios();
+  foreach ($usuarios as $usuario) {
+    $hash = $usuario["password"];
+    if (password_verify($_POST["passwordold"], $hash) == true) {
+      return true;
+    }
+  }
+
+  return null;
+}
+
 function existeElPass($password) {
   $usuarios = traerUsuarios();
   foreach ($usuarios as $usuario) {
@@ -288,6 +319,11 @@ function existeElPass($password) {
 
   return null;
 }
+
+
+
+
+
 
 function buscarUsuarioPorId($id) {
   global $db;
