@@ -174,7 +174,95 @@ if (!existeElPassEd($_POST["passwordold"])){
   return $errores;
   }
 
+  function validarEdicionAvatar() {
+    $errores = [];
 
+
+      if ( $_FILES["avatarEd"]["type"] != ( "image/png" ) &&
+          $_FILES["avatarEd"]["type"] != ( "image/jpeg" ) &&
+          $_FILES["avatarEd"]["type"] != ( "image/gif" ) &&
+          $_FILES["avatarEd"]["type"] != ( "image/psd" ) &&
+          $_FILES["avatarEd"]["type"] != ( "image/bmp" ) ) {
+        $errores["avatarEd"] = "Por favor subi una imagen";
+      }
+        return $errores;
+    }
+
+
+
+  function validarEdicionContrasenia() {
+    $errores = [];
+
+
+  if (!existeElPassEd($_POST["passwordold"])){
+    $errores["passwordold"] = "La Contasenia Actual no existe";
+
+  }
+
+
+    if (estaVacio($_POST["password"])) {
+      $errores["password"] = "Dejaste la contrasenia vacia";
+    }
+    if (estaVacio($_POST["cpassword"])) {
+      $errores["cpassword"] = "Dejaste el campo confirmar contrasenia vacio";
+    }
+    if (!estaVacio($_POST["password"]) && !estaVacio($_POST["cpassword"]) && $_POST["password"] != $_POST["cpassword"]) {
+      $errores["password"] = "Las contrasenias no coinciden";
+    }
+
+    return $errores;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function validarEdicionDatos() {
+    $errores = [];
+
+    $errorEnNombre = esAlfabeticoYMinimoCaracteres($_POST["nombre"], "nombre", 3);
+    if ($errorEnNombre != null) {
+      $errores["nombre"] = $errorEnNombre;
+    }
+
+    $errorEnApellido = esAlfabeticoYMinimoCaracteres($_POST["apellido"], "apellido", 5);
+    if ($errorEnApellido != null) {
+      $errores["apellido"] = $errorEnApellido;
+    }
+
+
+    if (estaVacio($_POST["telefono"])) {
+      $errores["telefono"] = "Por favor complete su telefono";
+    } else if (is_numeric($_POST["telefono"]) == false) {
+      $errores["telefono"] = "El telefono debe ser un numero";
+    }
+
+return $errores;
+}
 function estaVacio($campo) {
   if ($campo == "") {
     return true;
@@ -279,6 +367,52 @@ $consulta->bindValue(":apellido", $apellido);
 $consulta->bindValue(":telefono", $telefono);
 $consulta->bindValue(":password", $password);
 $consulta->bindValue(":avatar", $avatar);
+$consulta->execute();
+}
+
+function actualizarUsuarioPorEmailAvatar($email,$avatar){
+
+
+global $db;
+$sql="UPDATE users SET avatar=:avatar  WHERE email = :email ";
+$consulta = $db->prepare($sql);
+
+$consulta->bindValue(":email", $email);
+
+$consulta->bindValue(":avatar", $avatar);
+$consulta->execute();
+}
+
+
+
+
+function actualizarUsuarioPorEmailContrasenia($email,$password){
+
+$password=password_hash($password, PASSWORD_DEFAULT);
+global $db;
+$sql="UPDATE users SET  password=:password  WHERE email = :email ";
+$consulta = $db->prepare($sql);
+
+$consulta->bindValue(":email", $email);
+
+$consulta->bindValue(":password", $password);
+
+$consulta->execute();
+}
+
+
+function actualizarUsuarioPorEmailDatos($email,$nombre,$apellido,$telefono){
+
+
+global $db;
+$sql="UPDATE users SET nombre=:nombre,apellido=:apellido,telefono=:telefono  WHERE email = :email ";
+$consulta = $db->prepare($sql);
+
+$consulta->bindValue(":email", $email);
+$consulta->bindValue(":nombre", $nombre);
+$consulta->bindValue(":apellido", $apellido);
+$consulta->bindValue(":telefono", $telefono);
+
 $consulta->execute();
 }
 

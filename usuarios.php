@@ -137,19 +137,31 @@
 		<?php if (isset($_SESSION["usuarioLogueado"]))  : ?>
 	<br>
 
-	<div class="navbar" Style="height:45px;max-width:100%;margin-left:-1%;margin-top:-1%;">
+	<div class="navbar" Style="height:45px;max-width:100%;margin-left:-1%;margin-top:-1%;overflow:hidden">
+		<div class="uno" style="float:left">
 		<div class="dropdown">
 
 			<a href="index.php">Inicio</a>
-				<a href="miPerfil.php">Mi Perfil</a>
+				<a href="usuarios.php">Usuarios</a>
 			<a href="logout.php">Logout</a>
+			<div class="dropdown-content">
+</div>
+			</div>
+		</div>
+		<div class="dos" style="float:right">
+		<div class="dropdown">
+	 <strong><a href="miPerfil.php">Mi Perfil</a></strong>
+		<strong>	<a href="miPerfilFoto.php">Foto</a></strong>
+		<strong>		<a href="miPerfilContraseña.php">Contraseña</a></strong>
+
 			<div class="dropdown-content">
 
 			</div>
 		</div>
-
+		</div>
 
 	</div>
+
 
 
 

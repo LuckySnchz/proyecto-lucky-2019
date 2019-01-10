@@ -1,58 +1,27 @@
 <?php
+
 require_once("funciones.php");
-
-if ( isset($_SESSION["usuarioLogueado"]) == false ) {
-	header("location:login.php");exit;
-}
-	$usuario = buscarUsuarioPorEmail($_SESSION["usuarioLogueado"]);
-
-
-
-
-	$errores = [];
-
-  $nombreDefaultEdicion= $usuario["nombre"];
-  $apellidoDefaultEdicion= $usuario["apellido"];
-	$telefonoDefaultEdicion= $usuario["telefono"];
-  $avatarDefaultEdicion=$usuario["avatar"];
-
-
-
-	if ( $_POST ) {
-		$errores = validarEdicion();
-
-		if ( count($errores) == 0 ) {
-			$nombreDefaultEdicion= $_POST["nombre"];
-			$apellidoDefaultEdicion= $_POST["apellido"];
-			$telefonoDefaultEdicion= $_POST["telefono"];
-
-
-
-
-$avatar=guardarAvatarEdicion($_FILES["avatarEd"]["name"],$_FILES["avatarEd"]["tmp_name"]);
-
-			$usuario =actualizarUsuarioPorEmail($_SESSION["usuarioLogueado"],$_POST["nombre"],$_POST["apellido"],$_POST["telefono"],$_POST["password"],$avatar);
-
-			echo '<div class="alert alert-success" style="text-align:center;font-size:30px;color:"red">EDICIÓN EXITOSA </div>';
-			header("Refresh: 1; URL=index.php");exit;}
-	}
+$usuario=buscarUsuarioPorEmail($_SESSION["usuarioLogueado"]);
+if($usuario["genero"]=="f"){$usuario["genero"]="Femenino";}
+if($usuario["genero"]=="m"){$usuario["genero"]="Masculino";}
+if($usuario["genero"]=="o"){$usuario["genero"]="Otro";}
+$año_nacimiento=substr($usuario["nacimiento"], 0, 4);  // edad
+$año_nacimiento = (int) $año_nacimiento;
+$año_actual = date("Y");
+$año_actual=(int) $año_actual;
+$edad=$año_actual-$año_nacimiento;
 
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Registración</title>
-	<link href="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	<meta charset="utf-8">
+	<title></title>
 	<style>
 	.navbar {
 	  overflow: hidden;
 	  background-color: white;
 	  font-family: Arial, Helvetica, sans-serif;
+		width: 100%;
 
 	}
 
@@ -83,7 +52,7 @@ $avatar=guardarAvatarEdicion($_FILES["avatarEd"]["name"],$_FILES["avatarEd"]["tm
 
 	.navbar a:hover, .dropdown:hover .dropbtn {
 	  background-color: #e0e0d1;
-		border-radius: 20%;
+		border-radius: 10%;
 	}
 
 	.dropdown-content {
@@ -112,16 +81,21 @@ $avatar=guardarAvatarEdicion($_FILES["avatarEd"]["name"],$_FILES["avatarEd"]["tm
 	  display: block;
 	}
 
-
 	body{background: url(images/bg-body.png);font-family: 'Raleway', sans-serif;}
 	</style>
+
+
+
+
+	</head>
 </head>
 <body>
 	<ul class="links">
 		<?php if (isset($_SESSION["usuarioLogueado"]))  : ?>
 	<br>
 
-	<div class="navbar" Style="height:45px;max-width:100%;margin-left:-1%;margin-top:-1%;">
+	<div class="navbar" Style="height:45px;max-width:100%;margin-left:-1%;margin-top:-1%; overflow:hidden">
+		<div class="uno" style="float:left">
 		<div class="dropdown">
 
 			<a href="index.php">Inicio</a>
@@ -131,9 +105,22 @@ $avatar=guardarAvatarEdicion($_FILES["avatarEd"]["name"],$_FILES["avatarEd"]["tm
 
 			</div>
 		</div>
+	</div>
 
+	<div class="dos" style="float:right">
+	<div class="dropdown">
+		<strong><a href="miPerfilFoto.php">Fotos</a></strong>
+		<strong><a href="miPerfilDatos.php">Datos</a></strong>
+			<strong><a href="miPerfilContraseña.php">Contraseña</a></strong>
+
+		<div class="dropdown-content">
+
+		</div>
+	</div>
+	</div>
 
 	</div>
+
 
 
 
@@ -146,129 +133,54 @@ $avatar=guardarAvatarEdicion($_FILES["avatarEd"]["name"],$_FILES["avatarEd"]["tm
 					</ul>
 		<?php endif; ?>
 	</ul>
-<div class="contenedor" style="margin-left:5%">
-	<img src="avatars/<?=$usuario["avatar"]?>" style="width:100px;margin-left: 35%;border-radius:50%"><br><br>
-	<h2 style="margin-left:33%">Editar Perfil</h2><br>
-
-
-                <div class="row">
-                    <div class="col-md-3 register-left">
+	<div class="contenedor" style="margin-left:5%">
 
 
 
-                    </div>
+	                <div class="row">
+	                    <div class="col-md-3 register-left">
 
-                            	<form action="miPerfil.php" method="POST" enctype="multipart/form-data">
 
-                         <div class="form-group" >
-													 <ul style="color:red">
-												<?php if (isset($errores["nombre"])) : ?>
-													<input style="border: 1px solid red;" type="text" class="form-control" placeholder="Primer Nombre *" value="" name="nombre" />
-	                                        		<p style="color:red;font-size:8px;">
-																								<li>
-	                                        			<?=$errores["nombre"]?>
-																							</li>
-																							</ul>
-	                                        		</p>
 
-	                                        	<?php else : ?>
-	                                        		<input type="text" class="form-control" placeholder="Primer Nombre *" value="<?=$nombreDefaultEdicion?>" name="nombre" />
-                                            <?php endif; ?>
+	                    </div><br><br>
+											<!DOCTYPE html>
+											<html>
+											<head>
+												<title></title>
+											</head>
+											<body>
+<div class="ficha" style="margin-left:35%">
+<img src="avatars/<?=$usuario["avatar"]?>" style="width:100px;margin-left: 5%;border-radius:50%"><br><br>
+                    <strong><label>Nombre:</label></strong>
+												<?=$usuario["nombre"]?><br><br>
+												    <strong><label>Apellido:</label></strong>
+												<?=$usuario["apellido"]?><br><br>
+											    <strong>	<label>email:</label></strong>
+												<?=$usuario["email"]?><br><br>
+											    <strong>	<label>Teléfono:</label></strong>
+												<?=$usuario["telefono"]?><br><br>
+												<strong>	<label>Ciudad:</label></strong>
+											<?=$usuario["ciudad"]?><br><br>
+											    <strong>	<label>Género:</label></strong>
+													<?=$usuario["genero"]?><br><br>
 
-	                                        </div>
-                                          <div class="form-group">
-																					<ul style="color:red">
-																					<?php if (isset($errores["apellido"])) : ?>
-																						<input style="border: 1px solid red;" type="text" class="form-control" placeholder="Apellido *" value="" name="apellido" />
-																																<p style="color:red;font-size:8px;">
-																																	<li>
-																																	<?=$errores["apellido"]?>
-																																</li>
-																																</ul>
-																																</p>
-																															<?php else : ?>
-																																<input type="text" class="form-control" placeholder="Apellido *" value="<?=$apellidoDefaultEdicion?>" name="apellido"  />
-																															<?php endif; ?>
+											    <strong>	<label>Fecha de nacimiento:</label></strong>
+												<?=$usuario["nacimiento"]?><br><br>
 
-																														</div>
+												<strong>	<label>Edad:</label></strong>
+												<?php if (substr($usuario["nacimiento"], 5, 2)>date("m")) : ?>
+													<strong>(<?=$edad=-substr($usuario["nacimiento"], 0, 4)+date("Y")-1;?>)</strong>
+												<?php else : ?>
+												<strong>(<?=$edad=-substr($usuario["nacimiento"], 0, 4)+date("Y");?>)</strong>
+													<?php endif; ?>
+
+										<br><br>
 
 
 
 
 
-                                                                <div class="form-group" >
-																																<ul style="color:red">
-																																<?php if (isset($errores["telefono"])) : ?>
-																																	<input style="border: 1px solid red;" type="text" class="form-control" placeholder="Telefono*" value="" name="telefono" />
-																																											<p style="color:red;font-size:8px;">
-																																												<li>
-																																												<?=$errores["telefono"]?>
-																																											</li>
-																																											</p>
-																																										<?php else : ?>
-																																											<input type="text" class="form-control" placeholder="Telefono*" value="<?=$telefonoDefaultEdicion?>" name="telefono" />
-																																										<?php endif; ?>
-																																									</ul>
-																																									</div>
-																																									<div class="form-group">
-																				 			 																		 <ul style="color:red; ">
-																				 			 																		<?php if (isset($errores["passwordold"])) : ?>
-																				 			 									<input style="border: 1px solid red;" type="password" class="form-control" placeholder="Contasenia Actual *" value="" name="passwordold" />
-																				 			 																			<p style="color:red;font-size:8px;">
-																				 			 																				<li><?=$errores["passwordold"]?></li>
-																				 			 																			</p>
-																				 			 																		<?php else : ?>
-																				 			 																			<input type="password" class="form-control" placeholder="Contasenia Actual *" value="" name="passwordold" />
-																				 			 																		<?php endif; ?>
-																				 			 																		</ul>
-																				 			 							            </div>
-																																									<div class="form-group">
-																																										<ul style="color:red; ">
-																																									 <?php if (isset($errores["password"])) : ?>
-																																 <input style="border: 1px solid red;" type="password" class="form-control" placeholder="Nueva Contasenia *" value="" name="password" />
-																																										 <p style="color:red;font-size:8px;">
-																																											 <li><?=$errores["password"]?></li>
-																																										 </p>
-																																									 <?php else : ?>
-																																										 <input type="password" class="form-control" placeholder="Nueva Contrasenia *" value="" name="password" />
-																																									 <?php endif; ?>
-																																									 </ul>
-																														 </div>
-
-																														 <div class="form-group">
-																																<ul style="color:red; ">
-																															 <?php if (isset($errores["cpassword"])) : ?>
-																						 <input style="border: 1px solid red;" type="password" class="form-control" placeholder="Confirmar Nueva Contasenia *" value="" name="cpassword" />
-																																 <p style="color:red;font-size:8px;">
-																																	 <li><?=$errores["cpassword"]?></li>
-																																 </p>
-																															 <?php else : ?>
-																																 <input type="password" class="form-control" placeholder="Confirmar Nueva Contasenia *" value="" name="cpassword" />
-																															 <?php endif; ?>
-																															 </ul>
-																				 </div>
-
-
-
-
-
-
-																																									<div class="form-group" id="edicionDeAvatar">
-																																										<ul style="color:red">
-
-																																								<?php if (isset($errores["avatarEd"])) : ?>
-																																									<input type="file" class="form-control" placeholder="Tu Avatar *" value="" name="avatarEd" style="width:100%;margin-left:-0.5%" />
-																																																			<p style="color:red;font-size:8px;">
-																																																				<li>
-																																																				<?=$errores["avatarEd"]?>
-																																																			</li>
-																																																			</ul>
-																																																			</p>
-
-																																																		<?php else : ?>
-																																																			<input type="file" class="form-control" placeholder="Tu Avatar *" value="" name="avatarEd" style="width:100%;margin-left:-0.5%"/>
-																																																		 <?php endif; ?>
-																																																		 </div>
+</div>
 
 
 
@@ -276,11 +188,9 @@ $avatar=guardarAvatarEdicion($_FILES["avatarEd"]["name"],$_FILES["avatarEd"]["tm
 
 
 
-                                      <input type="submit" class="btnRegister"  value="Guardar" style="width:90%;background-color:grey;margin-left:9%;border-radius:10%"/>
-                                      </form>
-                                      </div>
 
-                                  </div>
+
+
 
 
 

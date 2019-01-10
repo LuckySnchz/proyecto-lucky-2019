@@ -231,18 +231,36 @@ $articulos = [
 			 </div>
 
 			</div>
+
+
+
+		<div class="navbar" Style="height:45px;max-width:100%;margin-left:1%;margin-top:-2%;overflow:hidden">
+			<div class="uno" style="float:left">
+			<div class="dropdown">
+
+				<a href="index.php">Inicio</a>
+					<a href="usuarios.php">Usuarios</a>
+				<a href="logout.php">Logout</a>
+				<div class="dropdown-content">
+	</div>
+				</div>
+			</div>
+			<div class="dos" style="float:right">
+			<div class="dropdown">
+		 <strong><a href="miPerfil.php">Mi Perfil</a></strong>
+			<strong>	<a href="miPerfilFoto.php">Foto</a></strong>
+			<strong>		<a href="miPerfilContraseña.php">Contraseña</a></strong>
+
+				<div class="dropdown-content">
+
+				</div>
+			</div>
+			</div>
+
 		</div>
 
 
-			<div class="navbar" Style="height:7%;max-width:100%;margin-left:1%;margin-top:1.5%">
-
-		  <a href="miPerfil.php">Mi Perfil</a>
-			 <a href="usuarios.php">Usuarios</a>
-		  <a href="logout.php">Logout</a>
-
-		</div>
-
-		<ul class="links" style="margin-left:40%;font-size:40px;margin-bottom:-3%">
+		<ul class="links" style="margin-left:37%;font-size:40px;margin-bottom:-3%">
 
 		<li>
 			Hola <?=buscarUsuarioPorEmail($_SESSION["usuarioLogueado"])["nombre"]?>

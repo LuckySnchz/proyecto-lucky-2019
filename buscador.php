@@ -181,12 +181,6 @@
 
 				<br>
 				</li>
-
-
-
-
-
-
 			</li>
 		<?php endforeach;?>
 	<?php endif;?>

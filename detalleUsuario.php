@@ -99,6 +99,7 @@ $edad=$año_actual-$año_nacimiento;
 
 			<a href="index.php">Inicio</a>
 			<a href="miPerfil.php">Mi Perfil</a>
+			<a href="usuarios.php">Usuarios</a>
 			<a href="logout.php">Logout</a>
 			<div class="dropdown-content">
 
@@ -144,6 +145,8 @@ $edad=$año_actual-$año_nacimiento;
 												<?=$usuario["email"]?><br><br>
 											    <strong>	<label>Teléfono:</label></strong>
 												<?=$usuario["telefono"]?><br><br>
+												<strong>	<label>Ciudad:</label></strong>
+											<?=$usuario["ciudad"]?><br><br>
 											    <strong>	<label>Género:</label></strong>
 													<?=$usuario["genero"]?><br><br>
 
