@@ -248,6 +248,7 @@ $articulos = [
 			<div class="dos" style="float:right">
 			<div class="dropdown">
 		 <strong><a href="miPerfil.php">Mi Perfil</a></strong>
+		 <strong>	<a href="miPerfilDatos.php">Datos</a></strong>
 			<strong>	<a href="miPerfilFoto.php">Foto</a></strong>
 			<strong>		<a href="miPerfilContraseña.php">Contraseña</a></strong>
 
