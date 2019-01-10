@@ -276,7 +276,7 @@ function esAlfabeticoYMinimoCaracteres($campo, $nombreCampo, $min) {
     return "Dejaste el campo $nombreCampo vacio";
   } else if (strlen($campo) < $min) {
     return "El campo $nombreCampo tiene un minimo de $min caracteres";
-  } else if (ctype_alpha($campo) == false) {
+  } else if (ctype_alpha(str_replace(" ", "", $campo)) == false) {
     return "El campo $nombreCampo debe ser alfabetico";
   } else {
     return null;
